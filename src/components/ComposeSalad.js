@@ -1,4 +1,4 @@
-import ComposeSaladModal from './ComposeSaladModal';
+import { Link } from 'react-router-dom';
 import SaladSection from './SaladSection';
 import SaladCheckbox from './SaladCheckbox';
 import Salad from '../Salad'
@@ -19,7 +19,7 @@ class ComposeSalad extends React.Component {
         this.handleChecked = this.handleChecked.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-    
+
     handleSelectFoundation(event) {
         this.setState({ selectedFoundation: event.target.value })
     }
@@ -61,32 +61,57 @@ class ComposeSalad extends React.Component {
             selectedDressing: Object.keys(this.props.inventory).filter(name => this.props.inventory[name].dressing)[0],
             isChecked: obj,
         })
+        this.props.history.push('/view-order');
+    }
+
+    saladCheckBoxRender = (name) => {
+        return (
+            <Link className="nav-link" to={`/view-ingredient/${name}`} >
+                <SaladCheckbox key={name} price={this.props.inventory[name].price} name={name} isChecked={this.state.isChecked[name] ? this.state.isChecked[name] : false} handleChecked={this.handleChecked} />
+            </Link>
+        )
     }
 
 
     render() {
         const foundations = Object.keys(this.props.inventory).filter(name => this.props.inventory[name].foundation);
         return (
-            <ComposeSaladModal value={this.state.selectedFoundation} handleSubmit={this.handleSubmit}>
-                <SaladSection handleSelect={this.handleChecked} formName='Choose foundation'>
-                    {foundations.map(name => <option price={this.props.inventory[name].price} key={name} value={name}>{name} + {this.props.inventory[name].price} kr</option>)}
-                </SaladSection>
-                <div className="form-group" id="proteins">
-                    <label htmlFor="proteins">Proteins</label>
-                    {Object.keys(this.props.inventory).filter(name => this.props.inventory[name].protein).map(name => <SaladCheckbox key={name} price={this.props.inventory[name].price} name={name} isChecked={this.state.isChecked[name] ? this.state.isChecked[name] : false} handleChecked={this.handleChecked} />)}
+            <div className="container">
+                <div>
+                    Compose your salad, click on the ingredient for more info. Resets state :(
                 </div>
-                <div className="form-group" id="extras">
-                    <label htmlFor="extras"> Extras</label>
-                    {Object.keys(this.props.inventory).filter(name => this.props.inventory[name].extra).map(name => <SaladCheckbox key={name} price={this.props.inventory[name].price} name={name} isChecked={this.state.isChecked[name] ? this.state.isChecked[name] : false} handleChecked={this.handleChecked} />)}
-                </div>
-                <SaladSection value={this.state.selectedDressing} handleSelect={this.handleChecked} formName='Choose dressing'>
-                    {Object.keys(this.props.inventory).filter(name => this.props.inventory[name].dressing).map(name => <option price={this.props.inventory[name].price} key={name} value={name}>{name} + {this.props.inventory[name].price} kr</option>)
-                    }
-                </SaladSection>
-            </ComposeSaladModal>
+                <br/>
+                <form onSubmit={(event) => this.handleSubmit(event)}>
+                    <SaladSection handleSelect={this.handleChecked} formName='Choose foundation'>
+                        {foundations.map(name => <option price={this.props.inventory[name].price} key={name} value={name}>{name} + {this.props.inventory[name].price} kr </option>)}
+                    </SaladSection>
+                    <div className="form-group" id="proteins">
+                        <label htmlFor="proteins">Proteins</label>
+                        {Object.keys(this.props.inventory).filter(name => this.props.inventory[name].protein).map(name => {
+                            return (
+                                <SaladCheckbox key={name} price={this.props.inventory[name].price} name={name} isChecked={this.state.isChecked[name] ? this.state.isChecked[name] : false} handleChecked={this.handleChecked} />
+                            )
+                        })}
+                    </div>
+                    <div className="form-group" id="extras">
+                        <label htmlFor="extras"> Extras</label>
+                        {Object.keys(this.props.inventory).filter(name => this.props.inventory[name].extra).map(name => {
+                            return (
+                                <SaladCheckbox key={name} price={this.props.inventory[name].price} name={name} isChecked={this.state.isChecked[name] ? this.state.isChecked[name] : false} handleChecked={this.handleChecked} />
+                            )
+                        })}
+                    </div>
+                    <SaladSection value={this.state.selectedDressing} handleSelect={this.handleChecked} formName='Choose dressing'>
+                        {Object.keys(this.props.inventory).filter(name => this.props.inventory[name].dressing).map(name => <option price={this.props.inventory[name].price} key={name} value={name}>{name} + {this.props.inventory[name].price} kr</option>)
+                        }
+                    </SaladSection>
+                    <button type="submit" className="btn mb-10 btn-primary float-right">Add selections</button>
+                </form>
+            </div>
 
         )
     }
 }
+
 
 export default ComposeSalad;

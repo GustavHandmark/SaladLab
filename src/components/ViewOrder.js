@@ -4,6 +4,8 @@ import shortid from 'shortid';
 const ViewOrder = (props) => {
 
     return (
+        <div className="container">
+        Your orders:
         <ul className="list-group">
             {props.salads.map(salad => {
                 return (
@@ -16,6 +18,7 @@ const ViewOrder = (props) => {
                 )
             })}
         </ul>
+        </div>
     )
 
 }
