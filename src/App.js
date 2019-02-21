@@ -43,8 +43,6 @@ class App extends Component {
         }))))
   }
 
-  // jim.forsberg@stockforsa.com
-
   postSalads(data) {
     console.log(data)
     fetch("http://localhost:8080/orders/", {
