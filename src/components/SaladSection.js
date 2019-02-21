@@ -4,9 +4,10 @@ const SaladSection = props => {
     return (
         <div className="form-group">
             <label htmlFor={props.formName}>{props.formName}</label>
-            <select className="form-control" value={props.value} id={props.formName} onChange={props.handleSelect}>
+            <select required className="form-control" value={props.value} id={props.formName} onChange={props.handleSelect}>
                 {props.children}
             </select>
+            <div className="invalid-feedback">required, select one</div>
         </div>
     )
 }
